@@ -1,6 +1,5 @@
 package runner;
 
-//import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.RequestLoggingFilter;
@@ -27,7 +26,6 @@ public abstract class BaseRunner {
                 .setBaseUri(EndPoints.BASE_API_URL)
                 .setContentType(ContentType.JSON)
                 .setAccept(ContentType.JSON)
-//                .addFilter(new AllureRestAssured())
                 .addFilter(new RequestLoggingFilter())
                 .addFilter(new ResponseLoggingFilter())
                 .build();

@@ -1,6 +1,3 @@
-//import io.qameta.allure.Description;
-//import io.qameta.allure.Epic;
-//import io.qameta.allure.Feature;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import model.CreateUserGetJson;
@@ -11,15 +8,12 @@ import org.testng.annotations.Test;
 import runner.BaseRunner;
 import runner.EndPoints;
 
-//@Epic("ToolsQARestAPI")
-//@Feature("Account Test")
 public final class AccountTest extends BaseRunner {
 
     private String newUserId;
     private String newTokenAPI;
 
     @Test (description = "Отправляем запрос и получаем ответ от сервера")
-//    @Description("Описание теста")
     public void testGetResponse() {
         Response response = requestSpec()
                 .body(new CreateUserPostJson("username",  "password"))
