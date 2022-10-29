@@ -9,7 +9,6 @@ import runner.BaseRunner;
 import runner.EndPoints;
 
 public final class AccountTest extends BaseRunner {
-
     private String newUserId;
     private String newTokenAPI;
 
