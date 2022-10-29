@@ -63,7 +63,7 @@ public abstract class BaseRunner {
 
     @AfterMethod
     protected void afterMethod(ITestResult testResult) {
-        BaseProperties.logf("Execution time is %o millis\n\n", (testResult.getEndMillis() - testResult.getStartMillis()));
+        BaseProperties.logf("Execution time is %s millis\n\n", (testResult.getEndMillis() - testResult.getStartMillis()));
     }
 
     @AfterClass
