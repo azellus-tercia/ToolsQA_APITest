@@ -6,7 +6,9 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import model.CreateUserPostJson;
+import org.testng.ITestResult;
 import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 
@@ -57,6 +59,11 @@ public abstract class BaseRunner {
     @BeforeMethod
     protected void beforeMethod(Method method) {
         BaseProperties.logf("Run %s.%s", this.getClass().getName(), method.getName());
+    }
+
+    @AfterMethod
+    protected void afterMethod(ITestResult testResult) {
+        BaseProperties.logf("Execution time is %o sec\n\n", (testResult.getEndMillis() - testResult.getStartMillis()) / 1000);
     }
 
     @AfterClass
