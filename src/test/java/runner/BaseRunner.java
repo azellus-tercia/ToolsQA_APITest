@@ -2,6 +2,7 @@ package runner;
 
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.filter.log.ErrorLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -13,6 +14,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 public abstract class BaseRunner {
 
@@ -26,6 +28,7 @@ public abstract class BaseRunner {
                 .setBaseUri(EndPoints.BASE_API_URL)
                 .setContentType(ContentType.JSON)
                 .setAccept(ContentType.JSON)
+                .addFilter(new ErrorLoggingFilter())
                 .build();
 
         Response response = requestSpec()
@@ -58,12 +61,15 @@ public abstract class BaseRunner {
 
     @BeforeMethod
     protected void beforeMethod(Method method) {
-        BaseProperties.logf("Run %s.%s", this.getClass().getName(), method.getName());
+        BaseProperties.logf("\nRun %s.%s", this.getClass().getName(), method.getName());
     }
 
     @AfterMethod
     protected void afterMethod(ITestResult testResult) {
-        BaseProperties.logf("Execution time is %s millis\n\n", (testResult.getEndMillis() - testResult.getStartMillis()));
+        BaseProperties.logf("Execution time is %s millis", (testResult.getEndMillis() - testResult.getStartMillis()));
+        if (!testResult.isSuccess()) {
+            BaseProperties.logf("Test %s is failed", testResult.getName());
+        }
     }
 
     @AfterClass
