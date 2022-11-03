@@ -1,15 +1,15 @@
 package runner;
 
-//import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
-import io.restassured.filter.log.RequestLoggingFilter;
-import io.restassured.filter.log.ResponseLoggingFilter;
+import io.restassured.filter.log.ErrorLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import model.CreateUserPostJson;
+import org.testng.ITestResult;
 import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 
@@ -27,9 +27,7 @@ public abstract class BaseRunner {
                 .setBaseUri(EndPoints.BASE_API_URL)
                 .setContentType(ContentType.JSON)
                 .setAccept(ContentType.JSON)
-//                .addFilter(new AllureRestAssured())
-                .addFilter(new RequestLoggingFilter())
-                .addFilter(new ResponseLoggingFilter())
+                .addFilter(new ErrorLoggingFilter())
                 .build();
 
         Response response = requestSpec()
@@ -62,21 +60,21 @@ public abstract class BaseRunner {
 
     @BeforeMethod
     protected void beforeMethod(Method method) {
-        BaseProperties.logf("Run %s.%s", this.getClass().getName(), method.getName());
+        BaseProperties.logf("\nRun %s.%s", this.getClass().getName(), method.getName());
+    }
+
+    @AfterMethod
+    protected void afterMethod(ITestResult testResult) {
+        BaseProperties.logf("Execution time is %s millis", (testResult.getEndMillis() - testResult.getStartMillis()));
+        if (!testResult.isSuccess()) {
+            BaseProperties.logf("Test %s is failed", testResult.getName());
+        }
     }
 
     @AfterClass
     protected void deleteUser() {
         requestSpecWithAuth()
                 .delete(EndPoints.PAGE_ACCOUNT_USER + "/" + userId);
-    }
-
-    protected String getTokenAPI() {
-        return tokenAPI;
-    }
-
-    protected String getUserId() {
-        return userId;
     }
 
     protected RequestSpecification requestSpec() {
