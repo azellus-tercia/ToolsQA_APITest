@@ -19,7 +19,7 @@ public final class AccountTest extends BaseTest {
     @Test (description = "Отправляем запрос и получаем ответ от сервера")
     public void testGetResponse() {
         Response response = requestSpec()
-                .body(new CreateUserPostJson("username",  "password"))
+                .body(new CreateUserPostJson("username",  "password").toString())
                 .post(EndPoints.PAGE_ACCOUNT_USER);
 
         Assert.assertNotNull(response);
